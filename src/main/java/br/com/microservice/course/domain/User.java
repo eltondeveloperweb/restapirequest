@@ -46,12 +46,20 @@ public class User implements Serializable{
 	public User() {
 	}
 
-	public User(Long id, String name, String email, String password, List<Request> requests) {		
+	public User(Long id, 
+			    String name, 
+			    String email, 
+			    String password, 
+			    Role role, 
+			    List<Request> requests,
+			    List<RequestStage> stages) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.password = password;
+		this.role = role;
 		this.requests = requests;
+		this.stages = stages;
 	}
 
 	public Long getId() {
