@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.microservice.course.domain.User;
+import br.com.microservice.course.exception.NotFoundException;
 import br.com.microservice.course.repository.UserRepository;
 import br.com.microservice.course.utils.HashUtil;
 
@@ -40,7 +41,7 @@ public class UserService {
 	
 	public User getUserById(Long id) {
 		Optional<User> result = userRepository.findById(id);
-		return result.get();
+		return result.orElseThrow(()-> new NotFoundException("There are not user with " + id));
 	}
 	
 	public List<User> listAll(){

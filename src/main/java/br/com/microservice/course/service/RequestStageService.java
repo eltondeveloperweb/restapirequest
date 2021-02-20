@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.microservice.course.domain.RequestStage;
 import br.com.microservice.course.domain.enums.RequestState;
+import br.com.microservice.course.exception.NotFoundException;
 import br.com.microservice.course.repository.RequestRepository;
 import br.com.microservice.course.repository.RequestStageRepository;
 
@@ -41,7 +42,7 @@ public class RequestStageService {
 	
 	public RequestStage getById(Long id) {
 		Optional<RequestStage> result = requestStageRepository.findById(id);
-		return result.get();
+		return result.orElseThrow(()-> new NotFoundException("There are not request stage with " + id));
 	}
 	
 	public List<RequestStage> listAllByRequestId(Long requestId){
