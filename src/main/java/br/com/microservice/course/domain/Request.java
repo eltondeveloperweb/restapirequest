@@ -18,6 +18,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.com.microservice.course.domain.enums.RequestState;
 
 @Entity(name = "request")
@@ -47,6 +49,7 @@ public class Request implements Serializable{
 	@JoinColumn(name = "owner_id", nullable = false)
 	private User owner;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "request")
 	private List<RequestStage> states = new ArrayList<>();
 	
