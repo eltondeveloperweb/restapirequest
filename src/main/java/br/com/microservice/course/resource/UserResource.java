@@ -1,7 +1,5 @@
 package br.com.microservice.course.resource;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,11 +9,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.microservice.course.domain.Request;
 import br.com.microservice.course.domain.User;
 import br.com.microservice.course.dto.UserLoginDto;
+import br.com.microservice.course.model.PageModel;
+import br.com.microservice.course.model.PageRequestModel;
 import br.com.microservice.course.service.RequestService;
 import br.com.microservice.course.service.UserService;
 
@@ -57,10 +58,14 @@ public class UserResource {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<User>> listAll(){
+	public ResponseEntity<PageModel<User>> listAll(
+			@RequestParam(value = "page") int page,
+			@RequestParam(value =  "size") int size){
 		
-		List<User> users = userService.listAll();
-		return ResponseEntity.status(HttpStatus.OK).body(users);
+		PageRequestModel pr = new PageRequestModel(page, size);
+		PageModel<User> pm = userService.listAllOnLazyMode(pr);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(pm);
 	}
 	
 	@PostMapping("/login")
@@ -71,10 +76,16 @@ public class UserResource {
 	}
 	
 	@GetMapping("/{id}/requests")
-	public ResponseEntity<List<Request>> listAllRequestsById(@PathVariable("id") Long id){
+	public ResponseEntity<PageModel<Request>> listAllRequestsById(
+			@PathVariable(name = "id") Long ownerId,
+			@RequestParam(value = "size") int size,
+			@RequestParam(value = "page") int page){
 		
-		List<Request> requests = RequestService.listAllByOwnerId(id);
-		return ResponseEntity.status(HttpStatus.OK).body(requests);
+		PageRequestModel pr = new PageRequestModel(page, size);
+		PageModel<Request> pm = RequestService.listAllByOwnerIdOnLazyModel(ownerId, pr);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(pm);
+		
 	}
 
 }
