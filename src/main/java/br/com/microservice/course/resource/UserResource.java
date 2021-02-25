@@ -1,9 +1,12 @@
 package br.com.microservice.course.resource;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.microservice.course.domain.Request;
 import br.com.microservice.course.domain.User;
 import br.com.microservice.course.dto.UserLoginDto;
+import br.com.microservice.course.dto.UserSaveDto;
+import br.com.microservice.course.dto.UserUpdateDto;
+import br.com.microservice.course.dto.UserUpdateRoleDto;
 import br.com.microservice.course.model.PageModel;
 import br.com.microservice.course.model.PageRequestModel;
 import br.com.microservice.course.service.RequestService;
@@ -34,16 +40,19 @@ public class UserResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<User> save(@RequestBody User user){
+	public ResponseEntity<User> save(@RequestBody @Valid UserSaveDto userdto){
 		
-		User createUser = userService.save(user);
+		User userToSave = userdto.transformToUser();
+		
+		User createUser = userService.save(userToSave);
 		return ResponseEntity.status(HttpStatus.CREATED).body(createUser);
 		
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<User> update(@PathVariable("id") Long id, @RequestBody User user){
+	public ResponseEntity<User> update(@PathVariable("id") Long id, @RequestBody @Valid UserUpdateDto userdto){
 		
+		User user = userdto.transformToUser();
 		user .setId(id);
 		User updateUser = userService.Update(user);
 		
@@ -69,7 +78,7 @@ public class UserResource {
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity<User> login(@RequestBody UserLoginDto user){
+	public ResponseEntity<User> login(@Valid @RequestBody UserLoginDto user){
 		
 		User logged = userService.login(user.getEmail(), user.getPassword());
 		return ResponseEntity.status(HttpStatus.OK).body(logged);
@@ -85,6 +94,19 @@ public class UserResource {
 		PageModel<Request> pm = RequestService.listAllByOwnerIdOnLazyModel(ownerId, pr);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(pm);
+		
+	}
+	
+	@PatchMapping("/{id}")
+	public ResponseEntity<?> updateRole(@PathVariable("id") Long id, @RequestBody @Valid UserUpdateRoleDto userDto){
+		
+		User user = new User();
+		user.setId(id);
+		user.setRole(userDto.getRole());
+		
+		userService.updateRole(user);
+		
+		return ResponseEntity.ok().build();
 		
 	}
 

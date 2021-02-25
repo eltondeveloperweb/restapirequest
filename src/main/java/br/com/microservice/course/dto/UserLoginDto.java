@@ -1,8 +1,14 @@
 package br.com.microservice.course.dto;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 public class UserLoginDto {
 	
+	@Email(message = "Invalid e-mail")
 	private String email;
+	
+	@NotBlank(message = "Password is required")
 	private String password;
 	
 	public UserLoginDto() {

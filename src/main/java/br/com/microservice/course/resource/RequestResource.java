@@ -1,5 +1,7 @@
 package br.com.microservice.course.resource;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.microservice.course.domain.Request;
 import br.com.microservice.course.domain.RequestStage;
+import br.com.microservice.course.dto.RequestSaveDto;
+import br.com.microservice.course.dto.RequestUpdateDto;
 import br.com.microservice.course.model.PageModel;
 import br.com.microservice.course.model.PageRequestModel;
 import br.com.microservice.course.service.RequestService;
@@ -33,16 +37,19 @@ public class RequestResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Request> save(@RequestBody Request request){
+	public ResponseEntity<Request> save(@RequestBody @Valid RequestSaveDto requestdto){
 		
+		Request request = requestdto.transformToRequest();
 		Request createRequest = requestService.save(request);
+		
 		return ResponseEntity.status(HttpStatus.CREATED).body(createRequest);
 		
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Request> update(@PathVariable("id") Long id, @RequestBody Request request){
+	public ResponseEntity<Request> update(@PathVariable("id") Long id, @RequestBody @Valid RequestUpdateDto requestdto){
 		
+		Request request = requestdto.transformToRequest();
 		request.setId(id);
 		
 		Request updateRequest = requestService.update(request);
