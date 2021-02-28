@@ -27,14 +27,14 @@ public class UserRepositoryTest {
 		User user = new User(null, "carmelita", "carmelita@gmail.com", "123", Role.ADMINSTRATOR, null, null);
 		User createdUser = userRepository.save(user);
 		
-		assertThat(createdUser.getId()).isEqualTo(6L);
+		assertThat(createdUser.getId()).isEqualTo(1L);
 		
 	}
 	
 	@Test
 	public void updateTest() {
 		
-		User user = new User(6L, "carmelita silva", "carmelita.silva@gmail.com", "123", Role.ADMINSTRATOR, null, null);
+		User user = new User(1L, "carmelita silva", "carmelita.silva@gmail.com", "123", Role.ADMINSTRATOR, null, null);
 		User updatedUser = userRepository.save(user);
 		
 		assertThat(updatedUser.getName()).isEqualTo("carmelita silva");
@@ -54,7 +54,7 @@ public class UserRepositoryTest {
 	public void listTest() {
 		
 		List<User> users = userRepository.findAll();
-		assertThat(users.size()).isEqualTo(6L);
+		assertThat(users.size()).isEqualTo(1L);
 		
 	}
 	
@@ -64,13 +64,13 @@ public class UserRepositoryTest {
 		Optional<User> result = userRepository.login("carmelita.silva@gmail.com", "123");
 		User loggedUser = result.get();
 		
-		assertThat(loggedUser.getId()).isEqualTo(6L);
+		assertThat(loggedUser.getId()).isEqualTo(1L);
 		
 	}
 	
 	@Test
 	public void updateRoleTest() {
-		int affectedRows = userRepository.updateRole(4L, Role.ADMINSTRATOR);
+		int affectedRows = userRepository.updateRole(1L, Role.ADMINSTRATOR);
 		assertThat(affectedRows).isEqualTo(1);
 	}
 

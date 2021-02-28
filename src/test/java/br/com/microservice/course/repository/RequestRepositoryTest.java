@@ -31,7 +31,7 @@ public class RequestRepositoryTest {
 		Request request = new Request(null, "Notebook Dell", "Para trabalhar em casa", new Date(), RequestState.OPEN, owner, null);
 		Request createdRequest = requestRepository.save(request);
 		
-		assertThat(createdRequest.getId()).isEqualTo(3L);
+		assertThat(createdRequest.getId()).isEqualTo(1L);
 	}
 	
 	@Test
@@ -40,7 +40,7 @@ public class RequestRepositoryTest {
 		User owner = new User();
 		owner.setId(1L);
 		
-		Request request = new Request(3L, "Notebook Dell Branco", "Para trabalhar em casa", null, RequestState.OPEN, owner, null);
+		Request request = new Request(1L, "Notebook Dell Branco", "Para trabalhar em casa", null, RequestState.OPEN, owner, null);
 		Request updatedRequest = requestRepository.save(request);
 		
 		assertThat(updatedRequest.getDescription()).isEqualTo("Para trabalhar em casa");
@@ -50,7 +50,7 @@ public class RequestRepositoryTest {
 	@Test
 	public void getByIdTest() {
 		
-		Optional<Request> result = requestRepository.findById(3L);
+		Optional<Request> result = requestRepository.findById(1L);
 		Request request = result.get();
 		
 		assertThat(request.getSubject()).isEqualTo("Notebook Dell");
@@ -61,7 +61,7 @@ public class RequestRepositoryTest {
 	public void listAllTest() {
 		
 		List<Request> requests = requestRepository.findAll();
-		assertThat(requests.size()).isEqualTo(3);
+		assertThat(requests.size()).isEqualTo(1);
 		
 	}
 	
@@ -69,7 +69,7 @@ public class RequestRepositoryTest {
 	public void listByOwnerIdTest() {
 		
 		List<Request> requests = requestRepository.findAllByOwnerId(1L);
-		assertThat(requests.size()).isEqualTo(3);
+		assertThat(requests.size()).isEqualTo(1);
 		
 	}
 	
