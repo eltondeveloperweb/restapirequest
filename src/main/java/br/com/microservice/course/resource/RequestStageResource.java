@@ -1,5 +1,7 @@
 package br.com.microservice.course.resource;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.microservice.course.domain.RequestStage;
+import br.com.microservice.course.dto.RequestStageSaveDto;
 import br.com.microservice.course.service.RequestStageService;
 
 @RestController
@@ -25,8 +28,9 @@ public class RequestStageResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<RequestStage> save(@RequestBody RequestStage requestStage){
+	public ResponseEntity<RequestStage> save(@RequestBody @Valid RequestStageSaveDto requestStageDto){
 		
+		RequestStage requestStage = requestStageDto.transformToRequestStage();
 		RequestStage createStage = requestStageService.save(requestStage);
 		return ResponseEntity.status(HttpStatus.CREATED).body(createStage);
 	}
