@@ -2,16 +2,14 @@ package br.com.microservice.course.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import br.com.microservice.course.domain.User;
-import br.com.microservice.course.domain.enums.Role;
+import io.restassured.RestAssured;
 
 
 @SpringBootTest
@@ -21,44 +19,58 @@ public class UserRepositoryTest {
 	private UserRepository userRepository;
 	
 	@Test
-	@Order(1)
-	public void saveTest() {
-		
-		User user = new User(null, "carmelita", "carmelita@gmail.com", "123", Role.ADMINSTRATOR, null, null);
-		User createdUser = userRepository.save(user);
-		
-		assertThat(createdUser.getId()).isEqualTo(1L);
+	public void getAllTest() {
+		RestAssured.given().log().all()
+			.when()
+			.get("http://localhost:8082/users")
+			.then()
+			.statusCode(200)
+			.log()
+			.all();
+	}
+	
+	@Test
+	public void getUserById() {
+		RestAssured.given().log().all()
+		.when()
+		.get("http://localhost:8082/users/1")
+		.then()
+		.statusCode(200)
+		.log()
+		.all();
+	}
+	
+	@Test
+	public void saveUserTest() {
+		RestAssured.given().log().all()
+		.when()
+		.post("http://localhost:8082/users")
+		.then()
+		.log()
+		.all();
 		
 	}
 	
 	@Test
-	public void updateTest() {
-		
-		User user = new User(1L, "carmelita silva", "carmelita.silva@gmail.com", "123", Role.ADMINSTRATOR, null, null);
-		User updatedUser = userRepository.save(user);
-		
-		assertThat(updatedUser.getName()).isEqualTo("carmelita silva");
+	public void updateUserTest() {
+		RestAssured.given().log().all()
+		.when()
+		.put("http://localhost:8082/users/1")
+		.then()
+		.log()
+		.all();
 	}
 	
 	@Test
-	public void getByIdTest() {
-		
-		Optional<User> result = userRepository.findById(6L);
-		User user = result.get();
-		
-		assertThat(user.getPassword()).isEqualTo("123");
-		
+	public void updateRoleTest() {
+		RestAssured.given().log().all()
+		.when()
+		.patch("http://localhost:8082/users/1")
+		.then()
+		.log()
+		.all();
 	}
 	
-	@Test
-	public void listTest() {
-		
-		List<User> users = userRepository.findAll();
-		assertThat(users.size()).isEqualTo(1L);
-		
-	}
-	
-	@Test
 	public void loginTest() {
 		
 		Optional<User> result = userRepository.login("carmelita.silva@gmail.com", "123");
@@ -66,12 +78,6 @@ public class UserRepositoryTest {
 		
 		assertThat(loggedUser.getId()).isEqualTo(1L);
 		
-	}
-	
-	@Test
-	public void updateRoleTest() {
-		int affectedRows = userRepository.updateRole(1L, Role.ADMINSTRATOR);
-		assertThat(affectedRows).isEqualTo(1);
-	}
+	}	
 
 }

@@ -21,7 +21,6 @@ public class RequestStageRepositoryTest {
 	@Autowired
 	private RequestStageRepository requestStageRepository;
 	
-	@Test
 	public void saveTest() {
 		
 		User owner = new User();
@@ -36,7 +35,6 @@ public class RequestStageRepositoryTest {
 		assertThat(createdStage.getId()).isEqualTo(1L);
 	}
 
-	@Test
 	public void getStageById() {
 		
 		Optional<RequestStage> result = requestStageRepository.findById(1L);
@@ -45,7 +43,6 @@ public class RequestStageRepositoryTest {
 		assertThat(stage.getDescription()).isEqualTo("Novo Notebook");
 	}
 	
-	@Test
 	public void listByRequestTest() {
 		
 		List<RequestStage> stages = requestStageRepository.findAllByRequestId(1L);

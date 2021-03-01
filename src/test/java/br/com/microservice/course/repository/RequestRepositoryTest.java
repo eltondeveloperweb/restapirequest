@@ -21,8 +21,6 @@ public class RequestRepositoryTest {
 	@Autowired
 	private RequestRepository requestRepository;
 	
-	@Test
-	@Order(1)
 	public void saveTest() {
 		
 		User owner = new User();
@@ -34,7 +32,6 @@ public class RequestRepositoryTest {
 		assertThat(createdRequest.getId()).isEqualTo(1L);
 	}
 	
-	@Test
 	public void updateTest() {
 		
 		User owner = new User();
@@ -47,7 +44,6 @@ public class RequestRepositoryTest {
 		
 	}
 	
-	@Test
 	public void getByIdTest() {
 		
 		Optional<Request> result = requestRepository.findById(1L);
@@ -57,7 +53,6 @@ public class RequestRepositoryTest {
 		
 	}
 	
-	@Test
 	public void listAllTest() {
 		
 		List<Request> requests = requestRepository.findAll();
@@ -65,7 +60,6 @@ public class RequestRepositoryTest {
 		
 	}
 	
-	@Test
 	public void listByOwnerIdTest() {
 		
 		List<Request> requests = requestRepository.findAllByOwnerId(1L);
@@ -73,7 +67,6 @@ public class RequestRepositoryTest {
 		
 	}
 	
-	@Test
 	public void updateRequestStatusTest() {
 		
 		int affectedRows = requestRepository.updateStatus(4L, RequestState.IN_PROGRESS);
